@@ -1,0 +1,41 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+kubeconfig
+**/kubeconfig
+.kube/
+.azure/
+.aws/
+secrets/
+**/*secret*.yaml
+**/*secret*.yml
+
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+override.tf
+override.tf.json
+terraform.tfvars
+terraform.tfvars.json
+
+# Build and test output
+bin/
+obj/
+dist/
+build/
+coverage/
+*.log
+
+# Editor and operating system
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
