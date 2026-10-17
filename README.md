@@ -1,78 +1,102 @@
-# AegisOps Microservices DevSecOps Platform
+# AegisOps — Microservices DevSecOps Platform
 
-A personal cloud-native engineering project focused on securing and automating
-the delivery of microservices using Azure Kubernetes Service, GitHub Actions,
-Docker, GitOps, and observability.
+A personal DevSecOps engineering project demonstrating automated testing, containerization, and security checks for a cloud-native application.
 
-## Project goals
+**Repository:** [AegisOps on GitHub](https://github.com/lmaimounisara-cell/aegisops-microservices-devsecops-platform)
 
-- Automate application build and delivery workflows.
-- Apply security scanning to application images and dependencies.
-- Manage Kubernetes deployments declaratively with GitOps.
-- Provision and operate cloud infrastructure using infrastructure as code.
-- Improve workload reliability through health checks, autoscaling, and monitoring.
-- Document security decisions, operational procedures, and recovery workflows.
+## Project overview
+
+AegisOps currently includes a FastAPI Catalog API, automated tests, a Docker image build, and GitHub Actions workflows. The project is being developed incrementally, with implementation status documented transparently.
+
+## Verified capabilities
+
+- **API:** FastAPI endpoints for health checks and product queries.
+- **Testing:** Pytest tests for successful requests and missing products.
+- **Containerization:** Dockerfile using a slim Python image and a non-root application user.
+- **Continuous integration:** GitHub Actions runs tests and builds the Docker image.
+- **Repository security:** A workflow is configured for repository security checks.
+- **Documentation:** Architecture and project status documentation are maintained in the repository.
 
 ## Architecture
 
-The intended delivery flow is:
+The current verified workflow is:
 
-1. A change is pushed to GitHub.
-2. CI validates the change and builds the relevant container image.
-3. Security tools scan the image and dependencies.
-4. The approved image is published to a container registry.
-5. Argo CD reconciles the desired Kubernetes configuration.
-6. Kubernetes runs the workloads and exposes application endpoints.
-7. Prometheus and Grafana provide metrics and operational visibility.
+1. Source code is committed to GitHub.
+2. GitHub Actions installs dependencies and runs tests.
+3. The pipeline builds the Catalog API Docker image after tests pass.
+4. The workflow reports the results in GitHub Actions.
 
-The final implementation details will be documented as each component is
-verified. This flow describes the target architecture, not a claim that every
-step is currently active.
+Terraform, Azure Kubernetes Service, Argo CD, and production observability are longer-term goals and should not be considered deployed until their implementation is verified.
 
-## Technology areas
+## Technology stack
 
 | Area | Technology |
 |---|---|
-| Cloud | Microsoft Azure |
-| Container orchestration | Azure Kubernetes Service (AKS) |
-| Infrastructure as code | Terraform |
-| CI/CD | GitHub Actions |
+| API | Python, FastAPI |
+| Testing | Pytest |
 | Containers | Docker |
-| GitOps | Argo CD |
-| Security scanning | Trivy |
-| Observability | Prometheus and Grafana |
+| CI/CD | GitHub Actions |
+| Security tooling | Repository security checks; Trivy is used in the original microservices project pipeline |
+| Planned infrastructure | Terraform, Azure Kubernetes Service, Argo CD |
 
 ## Repository structure
 
-- `architecture/` — diagrams and architecture decisions.
-- `argocd/` — GitOps application definitions.
-- `docs/` — setup, implementation, and operations documentation.
-- `helm/` — Helm charts and values.
-- `kubernetes/` — Kubernetes workload configuration.
-- `observability/` — monitoring and logging configuration.
-- `scripts/` — automation scripts.
-- `security/` — security policies and scanning configuration.
-- `terraform/azure/` — Azure infrastructure code.
+- `services/catalog/` — Catalog API source, tests, dependencies, and Dockerfile.
+- `.github/workflows/` — CI and repository security workflows.
+- `architecture/` — Architecture notes and diagram source.
+- `docs/PROJECT_STATUS.md` — Implemented capabilities and outstanding work.
+- `docs/SECURITY.md` — Security practices and planned improvements.
+- `CONTRIBUTING.md` — Contribution guidance.
+- `Makefile` — Common development commands.
 
-## Implementation status
+## Run locally
 
-This repository is being rebuilt as a clean, personal engineering portfolio.
-Components will be marked implemented only after their configuration and
-operation have been verified.
+Requirements: Python 3.12 or compatible, and Docker if you want to run the container.
+
+Run the tests from the Catalog API directory:
+
+```bash
+cd services/catalog
+python -m pytest tests -v
+```
+
+Build the Docker image from the repository root:
+
+```bash
+docker build -t aegisops-catalog:1.0.0 ./services/catalog
+```
+
+Run the container:
+
+```bash
+docker run --rm -p 8000:8000 aegisops-catalog:1.0.0
+```
+
+In another terminal, test the health endpoint:
+
+```bash
+curl http://localhost:8000/health
+```
+
+## Documentation
+
+- [Project status](docs/PROJECT_STATUS.md)
+- [Security practices](docs/SECURITY.md)
+- [Architecture overview](architecture/ARCHITECTURE.md)
+- [Architecture diagram source](architecture/DIAGRAM.md)
+
+## Project status
+
+This is an evolving portfolio project. The repository documents implemented features separately from planned work. Successful tests and workflow runs provide evidence of the capabilities currently available; they do not imply that the planned cloud infrastructure has been deployed.
 
 ## Security
 
-- Never commit credentials, access tokens, private keys, or kubeconfig files.
-- Keep environment-specific values outside source control when appropriate.
-- Review infrastructure plans before applying changes.
-- Document security findings and their remediation.
+Never commit credentials, access tokens, private keys, or kubeconfig files. Review security findings before publishing images or deploying workloads.
 
 ## License and third-party components
 
-Third-party software and dependencies remain subject to their respective
-licenses. Attribution and license requirements will be documented for any
-upstream components retained in this project.
+Review third-party dependency and upstream license obligations before redistribution. Any retained upstream code should be attributed appropriately.
 
 ## Author
 
-Personal engineering portfolio project by Sara.
+**Sara** — personal engineering portfolio project.
